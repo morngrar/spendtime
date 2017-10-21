@@ -6,8 +6,6 @@ import sqlite3
 DATABASE_FILE = "worktime.db"
 
 def generate_db():
-    print("Generating database...")
-    
     # connecting to the database file
     conn = sqlite3.connect(DATABASE_FILE)
     c = conn.cursor()
@@ -64,10 +62,11 @@ def main():
     
     total_seconds = 0
     for row in read_db():
-        print(row)
+        #print(row)
         total_seconds += row[2]
         
     print("In total ", round(total_seconds/3600, 2), " hours.")
+    time.sleep(3)
     
 
 if __name__ == "__main__":
