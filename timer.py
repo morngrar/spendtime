@@ -5,46 +5,51 @@ import sqlite3
 
 DATABASE_FILE = "worktime.db"
 
-def generate_db():
-    # connecting to the database file
-    conn = sqlite3.connect(DATABASE_FILE)
-    c = conn.cursor()
+def setup_db():
+    connection = sqlite3.connect(DATABASE_FILE)
+    cursor = connection.cursor()
 
-    # creating a new SQLite table with one column
-    c.execute(
+    return cursor, connection
+
+def teardown_db(connection):
+    connection.commit()
+    connection.close()
+
+    
+def generate_db():
+    cursor, connection = setup_db()
+
+    cursor.execute(
         "CREATE TABLE IF NOT EXISTS time"
         "(start REAL PRIMARY KEY, stop REAL, duration INTEGER)"
     )
 
-    # Committing changes and closing the connection to the database
-    conn.commit()
-    conn.close()
+    teardown_db(connection)
+
 
 def read_db():
-    print("Reading database...")
-    conn = sqlite3.connect(DATABASE_FILE)
-    c = conn.cursor()
+    cursor, connection = setup_db()
     
     dblist = []
-    c.execute('SELECT * FROM time')
-    data = c.fetchall()
+    cursor.execute('SELECT * FROM time')
+    data = cursor.fetchall()
     for row in data:
         dblist.append(row)
 
-    conn.close()
+    teardown_db(connection)
     return dblist
+
     
 def enter_record(start, stop, duration):
-    conn = sqlite3.connect(DATABASE_FILE)
-    c = conn.cursor()
+    cursor, connection = setup_db()
 
-    c.execute(
+    cursor.execute(
         "INSERT INTO time VALUES (?, ?, ?)",
         (start, stop, duration)
     )
 
-    conn.commit()
-    conn.close()
+    teardown_db(connection)
+
     
 def worktime():
     start = time.time()
@@ -52,6 +57,7 @@ def worktime():
     stop = time.time()
     duration = round(stop - start)
     return (start, stop, duration)
+
     
 def main():
     generate_db()
