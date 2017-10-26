@@ -3,6 +3,8 @@
 import time
 import sqlite3
 
+import ui
+
 DATABASE_FILE = "worktime.db"
 
 def setup_db():
