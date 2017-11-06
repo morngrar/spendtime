@@ -15,7 +15,7 @@ def teardown_db(connection):
     connection.commit()
     connection.close()
 
-    
+
 def generate_db():
     cursor, connection = setup_db()
 
@@ -29,7 +29,7 @@ def generate_db():
 
 def read_db():
     cursor, connection = setup_db()
-    
+
     dblist = []
     cursor.execute('SELECT * FROM time')
     data = cursor.fetchall()
@@ -39,7 +39,7 @@ def read_db():
     teardown_db(connection)
     return dblist
 
-    
+
 def enter_record(start, stop, duration):
     cursor, connection = setup_db()
 
@@ -50,7 +50,7 @@ def enter_record(start, stop, duration):
 
     teardown_db(connection)
 
-    
+
 def worktime():
     start = time.time()
     input("Press enter when finished.\n")
@@ -58,25 +58,23 @@ def worktime():
     duration = round(stop - start)
     return (start, stop, duration)
 
-    
+
 def main():
     generate_db()
-    
+
     stamp = worktime()
     print("Time spent: ", round(stamp[2]/60, 1), "min\n")
     enter_record(stamp[0], stamp[1], stamp[2])
-    
+
     total_seconds = 0
     for row in read_db():
         #print(row)
         total_seconds += row[2]
-        
+
     print("In total ", round(total_seconds/3600, 2), " hours.")
     time.sleep(3)
-    
+
 
 if __name__ == "__main__":
     main()
 
-
-    
