@@ -3,6 +3,16 @@
 import time
 import sqlite3
 import sys
+import logging
+import os
+
+try:
+    os.remove("timetable.log")
+except:
+    pass
+
+# Uncomment if debug log is needed
+#logging.basicConfig(filename="timetable.log", level=logging.DEBUG)
 
 import ui
 
@@ -95,7 +105,6 @@ def run_worktime(table = None):
 
     total_seconds = 0
     for row in read_table(table):
-        #print(row)
         total_seconds += row[2]
 
     print("In total ", round(total_seconds/3600, 2), " hours.")
@@ -134,24 +143,31 @@ def main():
     last_argument = None
     if len(sys.argv) > 1:
         for argument in sys.argv:
-#            print("Start of argument loop: ", argument)
-            # Run function at dictionary key given as argument (run with a menu, or a specific table)
+            logging.debug("Start of argument loop: {0}".format(argument))
+
             if ARGUMENT_TEXT:
-#                print("Argument text true")
-                ARGUMENT_DICT[last_argument](text = argument)  # pass current argument to last function.
-#                print("returned from argument function")
+                logging.debug("Argument text true")
+
+                ARGUMENT_DICT[last_argument](text = argument)
                 ARGUMENT_TEXT = False
+
+                logging.debug("returned from argument function")
             else:
-#                print("Argument text false")
+                logging.debug("Argument text false")
+
                 if argument not in ARGUMENT_DICT.keys():
-#                    print("Argument not in dict")
+                    logging.debug("Argument not in dict")
                     continue
-#                print("calling argument function")
+
+                logging.debug("calling argument function")
                 ARGUMENT_DICT[argument]()
-#                print("returned from argument function(text false)")
+
+                logging.debug(
+                    "returned from argument function(text false)"
+                )
             last_argument = argument
     else:
-#        print("arguments <= 1")
+        logging.debug("arguments <= 1")
         run_worktime()
 
 if __name__ == "__main__":
