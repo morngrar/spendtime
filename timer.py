@@ -112,6 +112,7 @@ def run_worktime(table = None):
 
 
 def menu():
+    # TODO: Menu for managing tables and seeing total time spent in each
     print(list_tables())
 
 
