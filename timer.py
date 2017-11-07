@@ -2,6 +2,7 @@
 
 import time
 import sqlite3
+import sys
 
 import ui
 
@@ -52,7 +53,7 @@ def read_table(table = None):
     teardown_db(connection)
     return dblist
 
-    
+
 def enter_record(start, stop, duration, table = None):
     cursor, connection = setup_db()
 
@@ -69,6 +70,16 @@ def enter_record(start, stop, duration, table = None):
 
     teardown_db(connection)
 
+def list_tables():
+    cursor, connection = setup_db()
+    result = connection.execute(
+        "SELECT name FROM sqlite_master WHERE type='table';"
+    )
+    returnlist = []
+    for data in result:
+        returnlist.append(data[0])
+    teardown_db(connection)
+    return returnlist
 
 def worktime():
     start = time.time()
@@ -77,25 +88,71 @@ def worktime():
     duration = round(stop - start)
     return (start, stop, duration)
 
-    
-def main():
-    generate_db()
-    
+def run_worktime(table = None):
     stamp = worktime()
     print("Time spent: ", round(stamp[2]/60, 1), "min\n")
-    enter_record(stamp[0], stamp[1], stamp[2])
-    
+    enter_record(stamp[0], stamp[1], stamp[2], table)
+
     total_seconds = 0
-    for row in read_table():
+    for row in read_table(table):
         #print(row)
         total_seconds += row[2]
-        
+
     print("In total ", round(total_seconds/3600, 2), " hours.")
     time.sleep(3)
-    
+
+
+def menu():
+    print(list_tables())
+
+
+def this_table(text = None):
+    """Run worktime with specific table. Fails on non-existing table"""
+    global ARGUMENT_TEXT
+
+    if not text:
+        ARGUMENT_TEXT = True
+        return
+
+    tables = list_tables()
+    if text not in tables:
+        print("This timetable doesn't exist yet!")
+        return
+
+    run_worktime(table=text)
+
+def main():
+    global ARGUMENT_TEXT
+    ARGUMENT_TEXT = False   # if true, the argument is text needed for function
+    ARGUMENT_DICT = {
+        "-m":menu,
+        "-t":this_table
+    }
+
+    generate_db()
+
+    last_argument = None
+    if len(sys.argv) > 1:
+        for argument in sys.argv:
+#            print("Start of argument loop: ", argument)
+            # Run function at dictionary key given as argument (run with a menu, or a specific table)
+            if ARGUMENT_TEXT:
+#                print("Argument text true")
+                ARGUMENT_DICT[last_argument](text = argument)  # pass current argument to last function.
+#                print("returned from argument function")
+                ARGUMENT_TEXT = False
+            else:
+#                print("Argument text false")
+                if argument not in ARGUMENT_DICT.keys():
+#                    print("Argument not in dict")
+                    continue
+#                print("calling argument function")
+                ARGUMENT_DICT[argument]()
+#                print("returned from argument function(text false)")
+            last_argument = argument
+    else:
+#        print("arguments <= 1")
+        run_worktime()
 
 if __name__ == "__main__":
     main()
-
-
-    
