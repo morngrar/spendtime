@@ -36,13 +36,13 @@ def generate_db(table = None):
 
     if not table:
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS time"
+            "CREATE TABLE IF NOT EXISTS 'Default timetable'"
             "(start REAL PRIMARY KEY, stop REAL, duration INTEGER)"
         )
     else:
         cursor.execute(
             (
-                "CREATE TABLE IF NOT EXISTS {0}"
+                "CREATE TABLE IF NOT EXISTS '{0}'"
                 "(start REAL PRIMARY KEY, stop REAL, duration INTEGER)"
             ).format(table)
         )
@@ -55,9 +55,9 @@ def read_table(table = None):
     
     dblist = []
     if not table:
-        cursor.execute('SELECT * FROM time')
+        cursor.execute("SELECT * FROM 'Default timetable'")
     else:
-        cursor.execute('SELECT * FROM {0}'.format(table))
+        cursor.execute("SELECT * FROM '{0}'".format(table))
     data = cursor.fetchall()
     for row in data:
         dblist.append(row)
@@ -71,12 +71,12 @@ def enter_record(start, stop, duration, table = None):
 
     if not table:
         cursor.execute(
-            "INSERT INTO time VALUES (?, ?, ?)",
+            "INSERT INTO 'Default timetable' VALUES (?, ?, ?)",
             (start, stop, duration)
         )
     else:
         cursor.execute(
-            "INSERT INTO {0} VALUES (?, ?, ?)".format(table),
+            "INSERT INTO '{0}' VALUES (?, ?, ?)".format(table),
             (start, stop, duration)
         )
 
@@ -94,7 +94,16 @@ def list_tables():
     return returnlist
 
 def delete_table(tablename):
-    ui.show("This is where a table will be deleted.")
+#    ui.show("This is where a table will be deleted.")
+    cursor, connection = setup_db()
+    cursor.execute(
+        (
+            "DROP TABLE IF EXISTS '{0}'"
+        ).format(tablename)
+    )
+    teardown_db(connection)
+    return 1
+
 
 def worktime():
     start = time.time()
@@ -111,12 +120,18 @@ def total_seconds(table):
 
 def run_worktime(table = None):
     stamp = worktime()
-    print("Time spent: ", round(stamp[2]/60, 1), "min\n")
     enter_record(stamp[0], stamp[1], stamp[2], table)
 
-    print("In total ", round(total_seconds(read_table(table))/3600, 2), " hours.")
-    time.sleep(3)
+    heading = ui.underline("Done!")
+    info = (
+        "\nTime spent: {0} min\n"
+        "In total {1} hours\n"
+    ).format(
+        round(stamp[2]/60, 1),
+        round(total_seconds(read_table(table))/3600, 2)
+    )
 
+    ui.show(heading + info)
 
 def menu():
     # TODO: Menu for managing tables and seeing total time spent in each
@@ -128,6 +143,8 @@ def menu():
     ui.menu(options, heading)
 
 def menu_list_tables():
+    def make_lambda(tablename):
+        return lambda:menu_table(tablename)
     tables = list_tables()
     heading = ui.underline("Available timetables")
     options = []
@@ -140,7 +157,7 @@ def menu_list_tables():
                 {
                     "key":str(i),
                     "text":table,
-                    "function":lambda:menu_table(table)
+                    "function":make_lambda(table)
                 }
             )
     options.append(
@@ -157,7 +174,7 @@ def menu_list_tables():
 def menu_new_table():
     tablename = input("\nName of new table: ")
     generate_db(table = tablename)
-    menu_table(tablename)
+    return 1
 
 def menu_table(tablename):
     heading = ui.underline(tablename)
@@ -195,8 +212,10 @@ def this_table(text = None):
         print("This timetable doesn't exist yet!")
         return
 
+    ui.clear_screen()
     print("Spending time on", text)
     run_worktime(table=text)
+    return 1
 
 def main():
     global ARGUMENT_TEXT
