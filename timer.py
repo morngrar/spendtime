@@ -217,12 +217,27 @@ def this_table(text = None):
     run_worktime(table=text)
     return 1
 
+def print_help():
+    info = (
+        "Usage: timetable [[-l][-m][-t tablename][--help]]\n\n"
+        "Available options are:\n"
+        "-l\t Lists all available timetables\n"
+        "-m\t Starts the program in menu-mode\n"
+        "-t\t Starts spending time on the specified table\n"
+        "-h\t Show this help message\n"
+        "--help\t Show this help message"
+    )
+    print(info)
+
 def main():
     global ARGUMENT_TEXT
     ARGUMENT_TEXT = False   # if true, the argument is text needed for function
     ARGUMENT_DICT = {
         "-m":menu,
-        "-t":this_table
+        "-t":this_table,
+        "-l":menu_list_tables,
+        "-h":print_help,
+        "--help":print_help
     }
 
     generate_db()
