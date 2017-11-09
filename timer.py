@@ -29,8 +29,7 @@ def setup_db():
 def teardown_db(connection):
     connection.commit()
     connection.close()
-
-    
+   
 def generate_db(table = None):
     cursor, connection = setup_db()
 
@@ -52,7 +51,7 @@ def generate_db(table = None):
 
 def read_table(table = None):
     cursor, connection = setup_db()
-    
+
     dblist = []
     if not table:
         cursor.execute("SELECT * FROM 'Default timetable'")
@@ -64,6 +63,7 @@ def read_table(table = None):
 
     teardown_db(connection)
     return dblist
+
 
 
 def enter_record(start, stop, duration, table = None):
@@ -103,7 +103,6 @@ def delete_table(tablename):
     )
     teardown_db(connection)
     return 1
-
 
 def worktime():
     start = time.time()
