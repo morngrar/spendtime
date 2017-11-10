@@ -153,12 +153,11 @@ def run_worktime(table = None):
 COPYRIGHT_SHOWN = False
 
 def menu():
-    # TODO: Menu for managing tables and seeing total time spent in each
-    copyright_notice = ""
     if not COPYRIGHT_SHOWN:
         global COPYRIGHT_SHOWN
         COPYRIGHT_SHOWN = True
         copyright_notice = (
+            "\n\n"
             "    timetable  Copyright (C) 2017  Svein-Kåre Bjørnsen\n"
             "    This program comes with ABSOLUTELY NO WARRANTY.\n"
             "    This is free software, and you are welcome to redistribute it\n"
@@ -166,13 +165,15 @@ def menu():
             "    https://github.com/morngrar/timetable/blob/master/LICENSE.md\n"
             "    for details.\n\n"
         )
+        ui.show(copyright_notice)
 
     heading = ui.underline("Main menu")
     options = [
         {"key":"l", "text":"List tables", "function":menu_list_tables},
         {"key":"n", "text":"Create new table", "function":menu_new_table}
     ]
-    ui.menu(options, copyright_notice+heading)
+    ui.menu(options, heading)
+
 
 def menu_list_tables():
     def make_lambda(tablename):
