@@ -1,20 +1,20 @@
 #!/usr/bin/python3
 
 
-#    This file is part of 'timetable'.
+#    This file is part of 'spendtime'.
 #
-#    timetable is free software: you can redistribute it and/or modify
+#    spendtime is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    timetable is distributed in the hope that it will be useful,
+#    spendtime is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with timetable.  If not, see <http://www.gnu.org/licenses/>.
+#    along with spendtime.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -29,14 +29,14 @@ import ui
 
 
 try:
-    os.remove("timetable.log")
+    os.remove("spendtime.log")
 except:
     pass
 
 # Uncomment if debug log is needed
 #logging.basicConfig(filename="timetable.log", level=logging.DEBUG)
 
-DATABASE_FILE = "timetable.db"
+DATABASE_FILE = "spendtime.db"
 
 def setup_db():
     connection = sqlite3.connect(DATABASE_FILE)
@@ -158,11 +158,11 @@ def menu():
         COPYRIGHT_SHOWN = True
         copyright_notice = (
             "\n\n"
-            "    timetable  Copyright (C) 2017  Svein-Kåre Bjørnsen\n"
+            "    spendtime  Copyright (C) 2017  Svein-Kåre Bjørnsen\n"
             "    This program comes with ABSOLUTELY NO WARRANTY.\n"
             "    This is free software, and you are welcome to redistribute it\n"
             "    under certain conditions; see\n"
-            "    https://github.com/morngrar/timetable/blob/master/LICENSE.md\n"
+            "    https://github.com/morngrar/spendtime/blob/master/LICENSE.md\n"
             "    for details.\n\n"
         )
         ui.show(copyright_notice)
@@ -252,7 +252,7 @@ def this_table(text = None):
 
 def print_help():
     info = (
-        "Usage: timetable [[-l][-m][-t tablename][--help]]\n\n"
+        "Usage: spendtime [[-l][-m][-t tablename][--help]]\n\n"
         "Available options are:\n"
         "-l\t Lists all available timetables\n"
         "-m\t Starts the program in menu-mode\n"

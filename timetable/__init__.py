@@ -1,1 +1,0 @@
-from .timetable import main

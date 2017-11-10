@@ -21,7 +21,7 @@ class CleanCommand(Command):
                 'rm -vrf ./build ./dist ./*.pyc ./*tgz ./*.egg-info *.rst *.db *~'
             )
 
-setup(name = 'timetable',
+setup(name = 'spendtime',
       version = '0.1.0',
       description = 'Simple timetracking tool for the terminal',
       long_description = readme(),
@@ -32,7 +32,7 @@ setup(name = 'timetable',
           'Programming Language :: Python :: 3',
           'Topic :: Utilities'
       ],
-      url = 'https://github.com/morngrar/timetable',
+      url = 'https://github.com/morngrar/spendtime',
       author = 'Svein-Kåre Bjørnsen',
       author_email = 'sveinkare@gmail.com',
       license = 'GPL',
@@ -43,7 +43,7 @@ setup(name = 'timetable',
       ],
       entry_points = {
           'console_scripts': [
-              'timetable = timetable.commands:main'
+              'spendtime = spendtime.commands:main'
           ]
       },
       cmdclass = {
