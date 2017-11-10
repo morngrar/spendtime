@@ -39,7 +39,7 @@ setup(name = 'timetable',
       include_package_data = True,
       packages = find_packages(),
       install_requires = [
-          "ui>=0.1.3",
+          "ui>=0.1.4",
       ],
       entry_points = {
           'console_scripts': [
