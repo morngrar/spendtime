@@ -18,7 +18,7 @@ class CleanCommand(Command):
     def run(self):
         if os.name == "posix":
             os.system(
-                'rm -vrf ./build ./dist ./*.pyc ./*tgz ./*.egg-info *.rst'
+                'rm -vrf ./build ./dist ./*.pyc ./*tgz ./*.egg-info *.rst *.db *~'
             )
 
 setup(name = 'timetable',
