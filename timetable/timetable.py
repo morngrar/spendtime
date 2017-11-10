@@ -1,5 +1,23 @@
 #!/usr/bin/python3
 
+
+#    This file is part of 'timetable'.
+#
+#    timetable is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    timetable is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with timetable.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
 import time
 import sqlite3
 import sys
@@ -18,7 +36,7 @@ except:
 # Uncomment if debug log is needed
 #logging.basicConfig(filename="timetable.log", level=logging.DEBUG)
 
-DATABASE_FILE = "worktime.db"
+DATABASE_FILE = "timetable.db"
 
 def setup_db():
     connection = sqlite3.connect(DATABASE_FILE)
@@ -29,7 +47,7 @@ def setup_db():
 def teardown_db(connection):
     connection.commit()
     connection.close()
-   
+
 def generate_db(table = None):
     cursor, connection = setup_db()
 
@@ -132,14 +150,30 @@ def run_worktime(table = None):
 
     ui.show(heading + info)
 
+COPYRIGHT_SHOWN = False
+
 def menu():
-    # TODO: Menu for managing tables and seeing total time spent in each
+    if not COPYRIGHT_SHOWN:
+        global COPYRIGHT_SHOWN
+        COPYRIGHT_SHOWN = True
+        copyright_notice = (
+            "\n\n"
+            "    timetable  Copyright (C) 2017  Svein-Kåre Bjørnsen\n"
+            "    This program comes with ABSOLUTELY NO WARRANTY.\n"
+            "    This is free software, and you are welcome to redistribute it\n"
+            "    under certain conditions; see\n"
+            "    https://github.com/morngrar/timetable/blob/master/LICENSE.md\n"
+            "    for details.\n\n"
+        )
+        ui.show(copyright_notice)
+
     heading = ui.underline("Main menu")
     options = [
         {"key":"l", "text":"List tables", "function":menu_list_tables},
         {"key":"n", "text":"Create new table", "function":menu_new_table}
     ]
     ui.menu(options, heading)
+
 
 def menu_list_tables():
     def make_lambda(tablename):
