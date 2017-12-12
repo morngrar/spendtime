@@ -153,8 +153,8 @@ def run_worktime(table = None):
 COPYRIGHT_SHOWN = False
 
 def menu():
+    global COPYRIGHT_SHOWN
     if not COPYRIGHT_SHOWN:
-        global COPYRIGHT_SHOWN
         COPYRIGHT_SHOWN = True
         copyright_notice = (
             "\n\n"
