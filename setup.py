@@ -22,7 +22,7 @@ class CleanCommand(Command):
             )
 
 setup(name = 'spendtime',
-      version = '0.1.0',
+      version = '0.1.1',
       description = 'Simple timetracking tool for the terminal',
       long_description = readme(),
       classifiers = [
