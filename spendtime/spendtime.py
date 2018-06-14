@@ -17,7 +17,7 @@
 #    along with spendtime.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+import datetime as dt
 import time
 import sqlite3
 import sys
@@ -133,6 +133,10 @@ def total_seconds(table):
     for row in table:
         seconds += row[2]
     return seconds
+
+def last_midnight():
+    """Returns the local timestamp of 00:00:00 today."""
+    return dt.datetime.combine(dt.date.today(), dt.time()).timestamp()
 
 def run_worktime(table = None):
     stamp = worktime()
