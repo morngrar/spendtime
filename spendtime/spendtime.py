@@ -140,6 +140,7 @@ def last_midnight():
     return dt.datetime.combine(dt.date.today(), dt.time()).timestamp()
 
 def fetch_todays_entries(table):
+    """Takes table in list form. Returns list of today's entries only."""
     data = read_table(tbale)
     midnight = last_midnight()
     todays_entries = [entry for entry in data if entry[0] >= midnight]
