@@ -129,6 +129,7 @@ def worktime():
     return (start, stop, duration)
 
 def total_seconds(table):
+    """Returns total amount of seconds in a given table."""
     seconds = 0
     for row in table:
         seconds += row[2]
