@@ -22,14 +22,14 @@ class CleanCommand(Command):
             )
 
 setup(name = 'spendtime',
-      version = '0.1.1',
+      version = '0.2',
       description = 'Simple timetracking tool for the terminal',
       long_description = readme(),
       classifiers = [
           'Development Status :: 4 - Beta',
           'Intended Audience :: End Users/Desktop',
           'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3.6',
           'Topic :: Utilities'
       ],
       url = 'https://github.com/morngrar/spendtime',

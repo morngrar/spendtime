@@ -17,7 +17,7 @@
 #    along with spendtime.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+import datetime as dt
 import time
 import sqlite3
 import sys
@@ -112,7 +112,6 @@ def list_tables():
     return returnlist
 
 def delete_table(tablename):
-#    ui.show("This is where a table will be deleted.")
     cursor, connection = setup_db()
     cursor.execute(
         (
@@ -130,24 +129,39 @@ def worktime():
     return (start, stop, duration)
 
 def total_seconds(table):
+    """Returns total amount of seconds in a given table."""
     seconds = 0
     for row in table:
         seconds += row[2]
     return seconds
 
+def last_midnight():
+    """Returns the local timestamp of 00:00:00 today."""
+    return dt.datetime.combine(dt.date.today(), dt.time()).timestamp()
+
+def fetch_todays_entries(table):
+    """Takes table name. Returns list of today's entries only."""
+    data = read_table(table)
+    midnight = last_midnight()
+    todays_entries = [entry for entry in data if entry[0] >= midnight]
+    return todays_entries
+
 def run_worktime(table = None):
     stamp = worktime()
     enter_record(stamp[0], stamp[1], stamp[2], table)
-
+    time_spent = round(stamp[2]/60, 1)
+    time_spent_today = round(
+        total_seconds(fetch_todays_entries(table)) / 3600,
+        2
+    )
+    #time_spent_today = round(time_spent_today, 2)
+    total_time_spent = round(total_seconds(read_table(table))/3600, 2)
     heading = ui.underline("Done!")
     info = (
-        "\nTime spent: {0} min\n"
-        "In total {1} hours\n"
-    ).format(
-        round(stamp[2]/60, 1),
-        round(total_seconds(read_table(table))/3600, 2)
+        f"\nTime just spent: {time_spent} minutes\n"
+        f"Time spent today: {time_spent_today} hours\n"
+        f"In total {total_time_spent} hours\n"
     )
-
     ui.show(heading + info)
 
 COPYRIGHT_SHOWN = False
