@@ -112,7 +112,6 @@ def list_tables():
     return returnlist
 
 def delete_table(tablename):
-#    ui.show("This is where a table will be deleted.")
     cursor, connection = setup_db()
     cursor.execute(
         (
