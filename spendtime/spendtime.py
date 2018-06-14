@@ -139,6 +139,11 @@ def last_midnight():
     """Returns the local timestamp of 00:00:00 today."""
     return dt.datetime.combine(dt.date.today(), dt.time()).timestamp()
 
+def fetch_todays_entries(table):
+    data = read_table(tbale)
+    midnight = last_midnight()
+    todays_entries = [entry for entry in data if entry[0] >= midnight]
+
 def run_worktime(table = None):
     stamp = worktime()
     enter_record(stamp[0], stamp[1], stamp[2], table)
