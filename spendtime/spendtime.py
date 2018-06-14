@@ -140,7 +140,7 @@ def last_midnight():
     return dt.datetime.combine(dt.date.today(), dt.time()).timestamp()
 
 def fetch_todays_entries(table):
-    """Takes table in list form. Returns list of today's entries only."""
+    """Takes table name. Returns list of today's entries only."""
     data = read_table(tbale)
     midnight = last_midnight()
     todays_entries = [entry for entry in data if entry[0] >= midnight]
@@ -148,16 +148,17 @@ def fetch_todays_entries(table):
 def run_worktime(table = None):
     stamp = worktime()
     enter_record(stamp[0], stamp[1], stamp[2], table)
-
+    time_spent = round(stamp[2]/60, 1)
+    if table:
+        time_spent_today = total_seconds(fetch_todays_entries(table)) / 3600
+        time_spent_today = round(time_spent_today, 2)
+    total_time_spent = round(total_seconds(read_table(table))/3600, 2)
     heading = ui.underline("Done!")
     info = (
-        "\nTime spent: {0} min\n"
-        "In total {1} hours\n"
-    ).format(
-        round(stamp[2]/60, 1),
-        round(total_seconds(read_table(table))/3600, 2)
+        f"\nTime just spent: {time_spent} min\n"
+        f"Time spent today this far: {time_spent_today} hours\n"
+        f"In total {total_time_spent} hours\n"
     )
-
     ui.show(heading + info)
 
 COPYRIGHT_SHOWN = False
